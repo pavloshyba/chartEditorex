@@ -19,15 +19,23 @@ SquareDataGenerator::SquareDataGenerator(QObject *parent)
     qRegisterMetaType<QAbstractAxis*>();
 }
 
+double randomDouble(double fMin, double fMax)
+{
+    double f = (double)rand() / RAND_MAX;
+    return fMin + f * (fMax - fMin);
+}
+
 double squareWaveValue(double x, double period)
 {
-    return sin(x / period * 2.0 * M_PI) >= 0.0 ? 1.0 : -1.0;
+    const auto upper = randomDouble(1.4, 0.8);
+    const auto bottom = randomDouble(-1.6, -0.6);
+    return sin(x / period * 2.0 * M_PI) >= 0.0 ? upper : bottom;
 }
 
 QVector<QPointF> generateChartData(int size)
 {
     QVector<QPointF> res;
-    for (int i = 0; i < size; i += 10)
+    for (int i = 0; i < size; i += 5)
         res.append({i*1.0, squareWaveValue(i, 3.0)});
 
     return res;

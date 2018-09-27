@@ -68,6 +68,8 @@ ApplicationWindow {
                 Row {
                     id: row
                     anchors { fill: parent; margins: 2 }
+                    spacing: 1
+
                     Rectangle {
                         //                        text: "Name: " + name;
                         anchors.verticalCenter: parent.verticalCenter
@@ -83,6 +85,25 @@ ApplicationWindow {
                             }
                         }
                     }
+
+                    Button {
+                        id: timerButton
+
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        width: 50
+                        height: 30
+
+                        text: refreshTimer.running ? "Stop" : "Start"
+
+                        onClicked: {
+                            if (refreshTimer.running)
+                                refreshTimer.stop();
+                            else
+                                refreshTimer.start( 1 / 60 * 1000)
+                        }
+                    }
+
                     ChartView {
                         id: mainChartView
 
@@ -90,6 +111,7 @@ ApplicationWindow {
                         height: 150
                         width: 600
                         legend.visible: false
+                        title: model.name
 
                         ValueAxis {
                              id: axisX
@@ -99,8 +121,8 @@ ApplicationWindow {
 
                         ValueAxis {
                              id: axisY
-                             min: -1
-                             max: 1
+                             min: -2
+                             max: 2
                          }
 
                         LineSeries {
@@ -116,14 +138,15 @@ ApplicationWindow {
 
                             }
 
-//                            Timer {
-//                                id: refreshTimer
-//                                interval: 1 / 60 * 1000 // 60 Hz
-//                                running: true
-//                                repeat: true
-//                                onTriggered: {
-//                                    dataSource.update(chartView.series(0));
-//                                }
+                            Timer {
+                                id: refreshTimer
+                                interval: 1 / 60 * 1000 // 60 Hz
+                                running: true
+                                repeat: true
+                                onTriggered: {
+                                    dataSource.update(mainChartView.series(0));
+                                }
+                            }
 
                         Component.onCompleted: {
                             dataSource.update(mainChartView.series(0));
@@ -147,11 +170,11 @@ ApplicationWindow {
     DelegateModel {
         id: visualModel
         model: ListModel {
-            ListElement { name: "FIRST" }
-            ListElement { name: "SECOND" }
-            ListElement { name: "SECOND" }
-            ListElement { name: "SECOND" }
-            ListElement { name: "SECOND" }
+            ListElement { name: "Generator #1" }
+            ListElement { name: "Generator #2" }
+            ListElement { name: "Generator #3" }
+            ListElement { name: "Generator #4" }
+            ListElement { name: "OSC #3" }
         }
 
         delegate: dragDelegate
