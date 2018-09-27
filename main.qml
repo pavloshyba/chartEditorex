@@ -18,7 +18,7 @@ ApplicationWindow {
     }
 
     Component {
-        id:dragDelegate
+        id: dragDelegate
 
         MouseArea {
             id: dragArea
@@ -84,31 +84,49 @@ ApplicationWindow {
                         }
                     }
                     ChartView {
+                        id: mainChartView
+
+                        objectName: "mainChartView"
                         height: 150
-                        width: 560
+                        width: 600
                         legend.visible: false
 
+                        ValueAxis {
+                             id: axisX
+                             min: 0
+                             max: 1000
+                         }
+
+                        ValueAxis {
+                             id: axisY
+                             min: -1
+                             max: 1
+                         }
+
                         LineSeries {
-                            XYPoint { x:0; y:0 }
-                            XYPoint { x:4; y:0 }
-                            XYPoint { x:4; y:1 }
-                            XYPoint { x:8; y:1 }
-                            XYPoint { x:8; y:0 }
-                            XYPoint { x:12; y:0 }
-                            XYPoint { x:12; y:1 }
-                            XYPoint { x:16; y:1 }
-                            XYPoint { x:16; y:0 }
-                            XYPoint { x:20; y:0 }
-                            XYPoint { x:20; y:1 }
-                            XYPoint { x:24; y:1 }
-                            XYPoint { x:24; y:0 }
-                            XYPoint { x:26; y:0 }
-                            XYPoint { x:26; y:0 }
-                            XYPoint { x:28; y:1 }
-                            XYPoint { x:28; y:1 }
-                            XYPoint { x:30; y:0 }
-                            XYPoint { x:30; y:0 }
-                            XYPoint { x:30; y:1 }
+                                id: lineSeries
+                                name: "signal"
+
+                                useOpenGL: true
+
+                                pointsVisible: true
+
+                                axisX: axisX
+                                axisY: axisY
+
+                            }
+
+//                            Timer {
+//                                id: refreshTimer
+//                                interval: 1 / 60 * 1000 // 60 Hz
+//                                running: true
+//                                repeat: true
+//                                onTriggered: {
+//                                    dataSource.update(chartView.series(0));
+//                                }
+
+                        Component.onCompleted: {
+                            dataSource.update(mainChartView.series(0));
                         }
                     }
                 }
@@ -118,8 +136,6 @@ ApplicationWindow {
                 anchors { fill: parent; margins: 10 }
 
                 onEntered: {
-                    console.log("drag.source.DelegateModel.itemsIndex",  drag.source.DelegateModel.itemsIndex)
-                    console.log("dragArea.DelegateModel.itemsIndex",  dragArea.DelegateModel.itemsIndex)
                     visualModel.items.move(
                                 drag.source.DelegateModel.itemsIndex,
                                 dragArea.DelegateModel.itemsIndex)
@@ -148,93 +164,3 @@ ApplicationWindow {
         cacheBuffer: 50
     }
 }
-
-
-//    Item {
-//        id: mainContent
-//        anchors.fill: parent
-//        visible: true
-//        opacity:
-
-//        Item {
-////            draggedItemParent: mainContent
-//            anchors.fill: parent
-//            /*contentItem:*/ ChartView {
-//                width: 400
-//                height: 200
-//                legend.visible: false
-
-//                LineSeries {
-//                    XYPoint { x:0; y:0 }
-//                    XYPoint { x:4; y:0 }
-//                    XYPoint { x:4; y:1 }
-//                    XYPoint { x:8; y:1 }
-//                    XYPoint { x:8; y:0 }
-//                    XYPoint { x:12; y:0 }
-//                    XYPoint { x:12; y:1 }
-//                    XYPoint { x:16; y:1 }
-//                    XYPoint { x:16; y:0 }
-//                    XYPoint { x:20; y:0 }
-//                    XYPoint { x:20; y:1 }
-//                    XYPoint { x:24; y:1 }
-//                    XYPoint { x:24; y:1 }
-//                }
-
-//                MouseArea {
-//                    anchors.fill: parent
-
-//                    drag.target: parent
-//                    drag.axis: Drag.YAxis
-//                    drag.smoothed: false
-//                    onReleased: {
-//                        console.debug("onReleased");
-//                        if (drag.active) {
-//                             console.debug("drag.active");
-//                        }
-//                    }
-//                }
-//            }
-//        }
-
-//        ScrollView {
-//            Layout.fillWidth: true
-//            Layout.fillHeight: true
-
-//            Layout.preferredHeight: 100; Layout.preferredWidth: 100
-//            clip: true
-//            visible: true
-//            ColumnLayout {
-//                anchors.fill: parent
-//                spacing: 0
-//                ListView {
-//                    model: 3
-
-//                    delegate: DraggableItem {
-//                        draggedItemParent: mainContent
-//                        contentItem: ChartView {
-//                            height: 200
-//                            width: 600
-//                            anchors.fill: parent
-//                            legend.visible: false
-
-//                            LineSeries {
-//                                XYPoint { x:0; y:0 }
-//                                XYPoint { x:4; y:0 }
-//                                XYPoint { x:4; y:1 }
-//                                XYPoint { x:8; y:1 }
-//                                XYPoint { x:8; y:0 }
-//                                XYPoint { x:12; y:0 }
-//                                XYPoint { x:12; y:1 }
-//                                XYPoint { x:16; y:1 }
-//                                XYPoint { x:16; y:0 }
-//                                XYPoint { x:20; y:0 }
-//                                XYPoint { x:20; y:1 }
-//                                XYPoint { x:24; y:1 }
-//                                XYPoint { x:24; y:1 }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
