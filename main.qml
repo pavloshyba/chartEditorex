@@ -8,9 +8,9 @@ import QtGraphicalEffects 1.0
 ApplicationWindow {
     id: mainWindow
     visible: true
-    width: 640
-    height: 480
-    title: qsTr("Scroll")
+    width: 900
+    height: 600
+    title: qsTr("Chart EditoREX")
 
     Item {
         id: rootItem
@@ -65,16 +65,16 @@ ApplicationWindow {
                     }
                 }
 
-                Row {
+                RowLayout {
                     id: row
                     anchors { fill: parent; margins: 2 }
                     spacing: 1
 
                     Rectangle {
-                        //                        text: "Name: " + name;
                         anchors.verticalCenter: parent.verticalCenter
-                        width: 10
-                        height: parent.height
+                        Layout.preferredWidth: 10
+                        Layout.fillHeight: true
+
                         LinearGradient {
                             anchors.fill: parent
                             start: Qt.point(0, 0)
@@ -108,45 +108,47 @@ ApplicationWindow {
                         id: mainChartView
 
                         objectName: "mainChartView"
-                        height: 150
-                        width: 600
+                        Layout.minimumHeight: 100; Layout.preferredHeight: 200
+                        Layout.minimumWidth: 400; Layout.preferredWidth:600
+                        Layout.fillWidth: true
+
                         legend.visible: false
                         title: model.name
 
                         ValueAxis {
-                             id: axisX
-                             min: 0
-                             max: 1000
-                         }
+                            id: axisX
+                            min: 0
+                            max: 1000
+                        }
 
                         ValueAxis {
-                             id: axisY
-                             min: -2
-                             max: 2
-                         }
+                            id: axisY
+                            min: -2
+                            max: 2
+                        }
 
                         LineSeries {
-                                id: lineSeries
-                                name: "signal"
+                            id: lineSeries
+                            name: "signal"
 
-                                useOpenGL: true
+                            useOpenGL: true
 
-                                pointsVisible: true
+                            pointsVisible: true
 
-                                axisX: axisX
-                                axisY: axisY
+                            axisX: axisX
+                            axisY: axisY
 
+                        }
+
+                        Timer {
+                            id: refreshTimer
+                            interval: 1 / 60 * 1000 // 60 Hz
+                            running: true
+                            repeat: true
+                            onTriggered: {
+                                dataSource.update(mainChartView.series(0));
                             }
-
-                            Timer {
-                                id: refreshTimer
-                                interval: 1 / 60 * 1000 // 60 Hz
-                                running: true
-                                repeat: true
-                                onTriggered: {
-                                    dataSource.update(mainChartView.series(0));
-                                }
-                            }
+                        }
 
                         Component.onCompleted: {
                             dataSource.update(mainChartView.series(0));
