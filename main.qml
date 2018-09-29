@@ -12,6 +12,33 @@ ApplicationWindow {
     height: 600
     title: qsTr("Chart EditoREX")
 
+    header: ToolBar {
+           RowLayout {
+               anchors.fill: parent
+                   ToolButton {
+                       id: tbViewer
+                       Layout.fillHeight: true
+                       Layout.preferredWidth: 100
+
+                       checkable: true
+                       checked: true
+                       Image {
+                           anchors.centerIn: parent
+                           fillMode: Image.PreserveAspectFit
+                           source: "/viewer.png"
+                       }
+                   }
+
+               Item {
+                   // spacer item
+                   id: spacer
+                   Layout.fillWidth: true
+                   Layout.fillHeight: true
+//                   Rectangle { anchors.fill: parent; color: "#ffaaaa" } // to visualize the spacer
+               }
+           }
+       }
+
     Item {
         id: rootItem
         anchors.fill: parent
@@ -182,10 +209,50 @@ ApplicationWindow {
         delegate: dragDelegate
     }
 
-    ListView {
+    StackLayout {
+        id: centralLayout
         anchors.fill: parent
-        model: visualModel
-        spacing: 4
-        cacheBuffer: 50
+
+        ListView {
+            id: viewerView
+            anchors.fill: parent
+            model: visualModel
+            spacing: 4
+            cacheBuffer: 50
+        }
+
+        Item {
+            id: editorView
+            Layout.fillHeight: true; Layout.fillWidth: true
+            Layout.alignment: Layout.Center
+            Text {
+                anchors.centerIn: parent
+                text: "To be Done"
+            }
+        }
+
+
+        onCurrentIndexChanged: console.log(currentIndex)
+
+        states: [
+            State {
+                name: "viewer"
+                when: tbViewer.checked
+                PropertyChanges {
+                    target: centralLayout
+                    currentIndex: 0
+                }
+            },
+            State {
+                name: "editor"
+                when: !tbViewer.checked
+                PropertyChanges {
+                    target: centralLayout
+                    currentIndex: 1
+                }
+            }
+        ]
     }
+
+
 }

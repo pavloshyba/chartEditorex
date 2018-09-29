@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="viewer.png">icons/viewer.png</file>
+    </qresource>
+</RCC>
