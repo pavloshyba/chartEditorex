@@ -15,8 +15,9 @@ Q_DECLARE_METATYPE(QAbstractAxis *)
 SquareDataGenerator::SquareDataGenerator(QObject *parent)
     : QObject(parent)
 {
-    qRegisterMetaType<QAbstractSeries*>();
-    qRegisterMetaType<QAbstractAxis*>();
+    static int ab = qRegisterMetaType<QAbstractSeries*>();
+    static int aa = qRegisterMetaType<QAbstractAxis*>();
+    Q_UNUSED(ab); Q_UNUSED(aa);
 }
 
 double randomDouble(double fMin, double fMax)
@@ -35,7 +36,7 @@ double squareWaveValue(double x, double period)
 QVector<QPointF> generateChartData(int size)
 {
     QVector<QPointF> res;
-    for (int i = 0; i < size; i += 5)
+    for (int i = 0; i < size; i += 2)
         res.append({i*1.0, squareWaveValue(i, 3.0)});
 
     return res;
@@ -46,7 +47,7 @@ void SquareDataGenerator::update(QAbstractSeries *series)
     if (series)
     {
         QXYSeries *xySeries = static_cast<QXYSeries *>(series);
-        _data = generateChartData(1000);
+        _data = generateChartData(10000);
         xySeries->replace(_data);
     }
 }

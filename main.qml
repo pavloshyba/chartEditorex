@@ -13,31 +13,31 @@ ApplicationWindow {
     title: qsTr("Chart EditoREX")
 
     header: ToolBar {
-           RowLayout {
-               anchors.fill: parent
-                   ToolButton {
-                       id: tbViewer
-                       Layout.fillHeight: true
-                       Layout.preferredWidth: 100
+        RowLayout {
+            anchors.fill: parent
+            ToolButton {
+                id: tbViewer
+                Layout.fillHeight: true
+                Layout.preferredWidth: 100
 
-                       checkable: true
-                       checked: true
-                       Image {
-                           anchors.centerIn: parent
-                           fillMode: Image.PreserveAspectFit
-                           source: "/viewer.png"
-                       }
-                   }
+                checkable: true
+                checked: true
+                Image {
+                    anchors.centerIn: parent
+                    fillMode: Image.PreserveAspectFit
+                    source: "/viewer.png"
+                }
+            }
 
-               Item {
-                   // spacer item
-                   id: spacer
-                   Layout.fillWidth: true
-                   Layout.fillHeight: true
-//                   Rectangle { anchors.fill: parent; color: "#ffaaaa" } // to visualize the spacer
-               }
-           }
-       }
+            Item {
+                // spacer item
+                id: spacer
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                //                   Rectangle { anchors.fill: parent; color: "#ffaaaa" } // to visualize the spacer
+            }
+        }
+    }
 
     Item {
         id: rootItem
@@ -127,7 +127,7 @@ ApplicationWindow {
                             if (refreshTimer.running)
                                 refreshTimer.stop();
                             else
-                                refreshTimer.start( 1 / 60 * 1000)
+                                refreshTimer.start( 1 / 600 * 1000)
                         }
                     }
 
@@ -169,7 +169,7 @@ ApplicationWindow {
 
                         Timer {
                             id: refreshTimer
-                            interval: 1 / 60 * 1000 // 60 Hz
+                            interval: 1 / 600 * 1000 // 60 KHz
                             running: true
                             repeat: true
                             onTriggered: {
@@ -225,12 +225,27 @@ ApplicationWindow {
             id: editorView
             Layout.fillHeight: true; Layout.fillWidth: true
             Layout.alignment: Layout.Center
-            Text {
-                anchors.centerIn: parent
-                text: "To be Done"
+
+            // TODO: remove
+            ChartView {
+                id: chartViewEditor
+                anchors.fill: parent
+                theme: ChartView.ChartThemeDark
+                antialiasing: true
+
+                LineSeries {
+                    id: temporaryLineSeries
+                    name: "To be done"
+                    XYPoint { x: 0; y: 0 }
+                    XYPoint { x: 10; y: 0 }
+                    XYPoint { x: 10; y: 10 }
+                    XYPoint { x: 20; y: 10 }
+                    XYPoint { x: 20; y: 0 }
+                    XYPoint { x: 30; y: 0 }
+                    XYPoint { x: 30; y: 10 }
+                }
             }
         }
-
 
         onCurrentIndexChanged: console.log(currentIndex)
 

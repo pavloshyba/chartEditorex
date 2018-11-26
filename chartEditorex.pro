@@ -14,7 +14,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    squaredatagenerator.cpp
+    squaredatagenerator.cpp \
+    mainchartview.cpp \
+    mainchart.cpp \
 
 RESOURCES += qml.qrc \
     icons.qrc
@@ -31,4 +33,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    squaredatagenerator.h
+    squaredatagenerator.h \
+    mainchartview.h \
+    mainchart.h \
